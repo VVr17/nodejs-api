@@ -1,11 +1,6 @@
-// const express = require('express');
-// const morgan = require('morgan');
-// require('dotenv').config();
-// const { postsRouter } = require('./routers/postsRouter');
-
 import express from 'express';
 import morgan from 'morgan'; // middleware for logging
-import postsRouter from './routers/postsRouter.js'; // router with posts
+import postsRouter from './src/routers/postsRouter.js'; // router with posts
 import * as dotenv from 'dotenv'; // to get variables from .env
 dotenv.config();
 
