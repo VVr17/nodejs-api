@@ -1,53 +1,56 @@
-let posts = [
-  { id: '1', topic: `test1`, text: `test text 1` },
-  { id: '2', topic: `test2`, text: `test text 2` },
-  { id: '3', topic: `test3`, text: `test text 3` },
-];
+import { ObjectId } from 'mongodb';
 
-const getAllPosts = (_, res) => {
+const getAllPosts = async (req, res) => {
+  const { Posts } = req.db;
+  const posts = await Posts.find({}).toArray();
   res.json({ posts, status: 'success' });
 };
 
-const getPostById = (req, res) => {
+const getPostById = async (req, res) => {
   const { postId } = req.params;
-  const post = posts.find(({ id }) => id === postId);
+  const { Posts } = req.db;
+  const post = await Posts.findOne({
+    _id: new ObjectId(postId),
+  });
 
   if (!post) {
     return res
       .status(400)
       .json({ status: `failure, no post with id ${postId}` });
   }
-
   res.json({ post, status: 'success' });
 };
 
-const addPost = (req, res) => {
+const addPost = async (req, res) => {
   const { topic, text } = req.body; // request body data
 
-  posts.push({
-    id: new Date().getTime().toString().slice(5),
-    topic,
-    text,
-  });
+  const { Posts } = req.db;
+  await Posts.insertOne({ topic, text });
+
   res.json({ status: 'success' });
 };
 
-const updatePost = (req, res) => {
+const updatePost = async (req, res) => {
   const { topic, text } = req.body;
   const { postId } = req.params;
+  const { Posts } = req.db;
 
-  posts.forEach(post => {
-    if (post.id === postId) {
-      post.topic = topic;
-      post.text = text;
-    }
-  });
+  await Posts.updateOne(
+    {
+      _id: new ObjectId(postId),
+    },
+    { $set: { topic, text } }
+  );
   res.json({ status: 'success' });
 };
 
-const deletePost = (req, res) => {
+const deletePost = async (req, res) => {
   const { postId } = req.params;
-  posts = posts.filter(({ id }) => id !== postId);
+  const { Posts } = req.db;
+
+  await Posts.deleteOne({
+    _id: new ObjectId(postId),
+  });
   res.json({ status: 'success' });
 };
 
