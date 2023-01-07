@@ -1,18 +1,10 @@
 import * as dotenv from 'dotenv'; // to get variables from .env
-import { MongoClient } from 'mongodb';
-const collections = {};
+import { mongoose } from 'mongoose';
+mongoose.set('strictQuery', true);
 
 dotenv.config();
-const client = new MongoClient(process.env.MONGO_URL);
-
-export const getCollections = () => {
-  return collections;
-};
 
 export const connectMongo = async () => {
-  await client.connect();
+  await mongoose.connect(process.env.MONGO_URL);
   console.log('db connected');
-  const db = client.db();
-
-  collections.Posts = db.collection('posts');
 };

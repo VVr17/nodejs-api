@@ -1,5 +1,5 @@
+// const Joi = require('joi');
 import Joi from 'joi';
-import { ValidationError } from '../helpers/errors.js';
 
 const addPostValidation = (req, res, next) => {
   // Joi validation
@@ -8,9 +8,9 @@ const addPostValidation = (req, res, next) => {
     text: Joi.string().min(10).max(400).required(),
   });
 
-  const { error } = schema.validate(req.body);
+  const {error} = schema.validate(req.body);
   if (error) {
-    next(new ValidationError(error.details));
+    return res.status(400).json({status: error.details[0].message});
   }
 
   next();

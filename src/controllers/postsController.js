@@ -1,63 +1,51 @@
-import { ObjectId } from 'mongodb';
+import {
+  addPost,
+  changePostById,
+  deletePostById,
+  getPostById,
+  getPosts,
+} from '../services/postsService.js';
 
-const getAllPosts = async (req, res) => {
-  const { Posts } = req.db;
-  const posts = await Posts.find({}).toArray();
+const getAllPostsController = async (req, res) => {
+  const posts = await getPosts();
   res.json({ posts, status: 'success' });
 };
 
-const getPostById = async (req, res) => {
+const getPostByIdController = async (req, res) => {
   const { postId } = req.params;
-  const { Posts } = req.db;
-  const post = await Posts.findOne({
-    _id: new ObjectId(postId),
-  });
+  const post = await getPostById(postId);
 
-  if (!post) {
-    return res
-      .status(400)
-      .json({ status: `failure, no post with id ${postId}` });
-  }
   res.json({ post, status: 'success' });
 };
 
-const addPost = async (req, res) => {
-  const { topic, text } = req.body; // request body data
+const addPostController = async (req, res) => {
+  const { topic, text } = req.body;
 
-  const { Posts } = req.db;
-  await Posts.insertOne({ topic, text });
-
+  await addPost({ topic, text });
   res.json({ status: 'success' });
 };
 
-const updatePost = async (req, res) => {
+const updatePostController = async (req, res) => {
   const { topic, text } = req.body;
   const { postId } = req.params;
-  const { Posts } = req.db;
 
-  await Posts.updateOne(
-    {
-      _id: new ObjectId(postId),
-    },
-    { $set: { topic, text } }
-  );
+  await changePostById(postId, { topic, text });
+
   res.json({ status: 'success' });
 };
 
-const deletePost = async (req, res) => {
+const deletePostController = async (req, res) => {
   const { postId } = req.params;
-  const { Posts } = req.db;
 
-  await Posts.deleteOne({
-    _id: new ObjectId(postId),
-  });
+  await deletePostById(postId);
+
   res.json({ status: 'success' });
 };
 
 export default {
-  getAllPosts,
-  getPostById,
-  addPost,
-  updatePost,
-  deletePost,
+  getAllPostsController,
+  getPostByIdController,
+  addPostController,
+  updatePostController,
+  deletePostController,
 };

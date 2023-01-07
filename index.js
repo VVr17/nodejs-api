@@ -3,6 +3,7 @@ import morgan from 'morgan'; // middleware for logging
 import postsRouter from './src/routers/postsRouter.js'; // router with posts
 import * as dotenv from 'dotenv'; // to get variables from .env
 import { connectMongo } from './src/db/connection.js';
+import { errorHandler } from './src/helpers/apiHelpers.js';
 
 dotenv.config();
 
@@ -14,9 +15,7 @@ app.use(morgan('tiny')); // morgan logger type
 
 app.use('/api/posts', postsRouter); // add postsRouter to app
 
-app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message });
-});
+app.use(errorHandler);
 
 const start = async () => {
   try {
