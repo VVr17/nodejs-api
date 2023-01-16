@@ -8,6 +8,10 @@ const postSchema = new Schema({
     required: true,
     unique: true,
   },
+  userId: {
+    type: String,
+    required: true,
+  },
   text: {
     type: String,
     required: true,

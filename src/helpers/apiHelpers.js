@@ -1,4 +1,4 @@
-import { WrongRequestError, ValidationError } from './errors.js';
+import { ApiError } from './errors.js';
 
 export const asyncWrapper = controller => {
   return (req, res, next) => {
@@ -7,7 +7,7 @@ export const asyncWrapper = controller => {
 };
 
 export const errorHandler = (err, req, res, next) => {
-  if (err instanceof ValidationError || err instanceof WrongRequestError) {
+  if (err instanceof ApiError) {
     return res.status(err.status).json({ message: err.message });
   }
 

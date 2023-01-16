@@ -1,13 +1,13 @@
 import { Post } from '../db/postModel.js';
 import { WrongRequestError } from '../helpers/errors.js';
 
-export const getPosts = async () => {
-  const posts = await Post.find({});
+export const getPosts = async userId => {
+  const posts = await Post.find({ userId });
   return posts;
 };
 
-export const getPostById = async postId => {
-  const post = await Post.findById(postId);
+export const getPostById = async (postId, userId) => {
+  const post = await Post.findById({ _id: postId, userId });
 
   if (!post) {
     throw new WrongRequestError(`failure, no post with id ${postId}`);
@@ -16,15 +16,18 @@ export const getPostById = async postId => {
   return post;
 };
 
-export const addPost = async ({ topic, text }) => {
-  const post = new Post({ topic, text });
+export const addPost = async ({ topic, text }, userId) => {
+  const post = new Post({ topic, text, userId });
   await post.save();
 };
 
-export const changePostById = async (postId, { topic, text }) => {
-  await Post.findByIdAndUpdate(postId, { $set: { topic, text } });
+export const changePostById = async (postId, { topic, text }, userId) => {
+  await Post.findByIdAndUpdate(
+    { _id: postId, userId },
+    { $set: { topic, text } }
+  );
 };
 
-export const deletePostById = async postId => {
-  await Post.findByIdAndDelete(postId);
+export const deletePostById = async (postId, userId) => {
+  await Post.findByIdAndDelete({ _id: postId, userId });
 };
