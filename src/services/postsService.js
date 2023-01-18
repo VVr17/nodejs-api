@@ -1,8 +1,14 @@
 import { Post } from '../db/postModel.js';
+import { User } from '../db/userModel.js';
 import { WrongRequestError } from '../helpers/errors.js';
 
-export const getPosts = async userId => {
-  const posts = await Post.find({ userId });
+export const getPosts = async (userId, { skip, limit }) => {
+  const posts = await Post.find({ userId })
+    .select({ __v: 0 })
+    .skip(skip)
+    .limit(limit)
+    .sort('topic');
+
   return posts;
 };
 
@@ -31,3 +37,22 @@ export const changePostById = async (postId, { topic, text }, userId) => {
 export const deletePostById = async (postId, userId) => {
   await Post.findByIdAndDelete({ _id: postId, userId });
 };
+
+/** Aggregate
+ * const userWithPostsAggregate = await User.aggregate([
+    {
+      $project: {
+        __v: 0,
+        password: 0,
+      },
+    },
+    {
+      $lookup: {
+        from: 'posts',
+        localField: '_id',
+        foreignField: 'userId',
+        as: 'userPosts',
+      },
+    },
+  ]);
+ */

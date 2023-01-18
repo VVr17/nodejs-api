@@ -8,9 +8,12 @@ import {
 
 const getAllPostsController = async (req, res) => {
   const { _id: userId } = req.user;
+  let { skip = 0, limit = 5 } = req.query;
 
-  const posts = await getPosts(userId);
-  res.json({ posts, status: 'success' });
+  limit = limit > 10 ? 10 : limit;
+
+  const posts = await getPosts(userId, { skip, limit });
+  res.json({ posts, skip, limit, status: 'success' });
 };
 
 const getPostByIdController = async (req, res) => {
