@@ -4,11 +4,12 @@ import { NotAuthorizedError } from '../helpers/errors.js';
 const authMiddleware = (req, res, next) => {
   try {
     const { authorization } = req.headers;
-    const [tokenType, token] = authorization.split(' ');
 
     if (!authorization) {
       next(new NotAuthorizedError('Please, provide a token'));
     }
+
+    const [tokenType, token] = authorization.split(' ');
 
     if (!token) {
       next(new NotAuthorizedError('Please, provide a token'));
@@ -19,7 +20,7 @@ const authMiddleware = (req, res, next) => {
 
     next();
   } catch (error) {
-    next(new NotAuthorizedError('Invalid token'));
+    next(error.message);
   }
 };
 

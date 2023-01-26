@@ -1,5 +1,4 @@
 import { Post } from '../db/postModel.js';
-import { User } from '../db/userModel.js';
 import { WrongRequestError } from '../helpers/errors.js';
 
 export const getPosts = async (userId, { skip, limit }) => {
