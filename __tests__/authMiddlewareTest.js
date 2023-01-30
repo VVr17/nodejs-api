@@ -1,5 +1,3 @@
-// use for jest with ECMAScript Modules -->  NODE_OPTIONS=--experimental-vm-modules npx jest
-
 import * as dotenv from 'dotenv'; // to get variables from .env
 import { jest } from '@jest/globals';
 import jwt from 'jsonwebtoken'; // JWT

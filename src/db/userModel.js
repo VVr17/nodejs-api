@@ -9,6 +9,10 @@ const userSchema = new Schema({
     required: true,
     unique: true,
   },
+  confirmed: {
+    type: Boolean,
+    default: false,
+  },
   firstName: String,
   lastName: String,
   title: String,
@@ -25,12 +29,9 @@ const userSchema = new Schema({
 
 // mongoose middleware --> before save
 userSchema.pre('save', async function () {
-  //if document is New / user doesn't exist --> hash password
-  if (this.isNew) {
+  if (this.isNew || this.isModified) {
     this.password = await bcrypt.hash(this.password, 10);
   }
-
-  //TODO: if user change password
 });
 
 export const User = model('User', userSchema);

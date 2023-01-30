@@ -1,9 +1,6 @@
-// use for jest with ECMAScript Modules -->  NODE_OPTIONS=--experimental-vm-modules npx jest
-
 import * as dotenv from 'dotenv'; // to get variables from .env
 import { jest } from '@jest/globals';
 import { getPostById } from '../src/services/postsService';
-import { WrongRequestError } from '../src/helpers/errors.js';
 import { Post } from '../src/db/postModel.js';
 
 dotenv.config();
