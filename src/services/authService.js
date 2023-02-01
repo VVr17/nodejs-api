@@ -1,13 +1,13 @@
+import * as dotenv from 'dotenv'; // to get variables from .env
 import bcrypt from 'bcrypt'; // hash, encode password
 import jwt from 'jsonwebtoken'; // JWT
 import sgMail from '@sendgrid/mail'; // to send email
-// import shajs from 'sha.js';
 import sha from 'sha256';
 import { User } from '../db/userModel.js';
 import { Verification } from '../db/verificationModel.js';
 import { NotAuthorizedError } from '../helpers/errors.js';
-// import { v4 as uuidv4 } from 'uuid';
 
+dotenv.config();
 const { SENDGRID_API_KEY, JWT_SECRET } = process.env;
 sgMail.setApiKey(SENDGRID_API_KEY);
 
@@ -25,7 +25,7 @@ export const registration = async (email, password) => {
 
   const message = {
     to: email,
-    from: 'vera.voronova@hotmail.com',
+    from: 'v.voronova.1117@gmail.com',
     subject: 'Email confirmation',
     text: `Please, confirm your email POST http://localhost:8081/api/auth/registration_confirmation/${code}`,
     html: `Please, confirm your email POST http://localhost:8081/api/auth/registration_confirmation/${code}`,
@@ -55,7 +55,7 @@ export const registrationConfirmation = async code => {
 
   const message = {
     to: user.email,
-    from: 'vera.voronova@hotmail.com',
+    from: 'v.voronova.1117@gmail.com',
     subject: 'Thank you for registration',
     text: "You've been successfully registered",
     html: "<h1>You've been successfully registered</h1>",
@@ -78,7 +78,7 @@ export const forgotPassword = async email => {
 
   const message = {
     to: user.email,
-    from: 'vera.voronova@hotmail.com',
+    from: 'v.voronova.1117@gmail.com',
     subject: 'Password forgot',
     text: `Here is your temporary password: ${password}`,
     html: `Here is your temporary password: ${password}`,
