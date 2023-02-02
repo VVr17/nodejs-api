@@ -31,7 +31,7 @@ export const registration = async (email, password) => {
     html: `Please, confirm your email POST ${HOST_URL}/api/auth/registration_confirmation/${code}`,
   };
 
-  https: await sgMail.send(message);
+  await sgMail.send(message);
 };
 
 export const registrationConfirmation = async code => {
