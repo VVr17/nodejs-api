@@ -5,6 +5,10 @@ function onLoad() {
 
   const socket = io(); // web-socket initialization on client
 
+  socket.on('WELCOME_MESSAGE', ({ message }) => {
+    console.log('<--', message);
+  });
+
   const form = document.getElementById('form');
   const messagesList = document.getElementById('messagesList');
 

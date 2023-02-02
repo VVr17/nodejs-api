@@ -17,11 +17,15 @@ const PORT = process.env.PORT || 8081; // get const from .env config
 // web-socket initialization
 const server = http.createServer(app);
 const io = new Server(server);
+
 io.on('connection', socket => {
   console.log('new client connected');
 
+  socket.emit('WELCOME_MESSAGE', { message: 'Welcome to chat' }); // for one connected user
+  socket.broadcast.emit('WELCOME_MESSAGE', { message: 'New user connected' }); // for everyone connected
+
   socket.on('CHAT_MESSAGE', ({ message, username }) => {
-    io.emit('CHAT_UPDATE', { message, username });
+    io.emit('CHAT_UPDATE', { message, username }); // the same socket.broadcast.emit
   });
 });
 
