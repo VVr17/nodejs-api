@@ -8,7 +8,7 @@ import { Verification } from '../db/verificationModel.js';
 import { NotAuthorizedError } from '../helpers/errors.js';
 
 dotenv.config();
-const { SENDGRID_API_KEY, JWT_SECRET } = process.env;
+const { SENDGRID_API_KEY, JWT_SECRET, HOST_URL } = process.env;
 sgMail.setApiKey(SENDGRID_API_KEY);
 
 export const registration = async (email, password) => {
@@ -27,11 +27,11 @@ export const registration = async (email, password) => {
     to: email,
     from: 'v.voronova.1117@gmail.com',
     subject: 'Email confirmation',
-    text: `Please, confirm your email POST http://localhost:8081/api/auth/registration_confirmation/${code}`,
-    html: `Please, confirm your email POST http://localhost:8081/api/auth/registration_confirmation/${code}`,
+    text: `Please, confirm your email POST ${HOST_URL}/api/auth/registration_confirmation/${code}`,
+    html: `Please, confirm your email POST ${HOST_URL}/api/auth/registration_confirmation/${code}`,
   };
 
-  await sgMail.send(message);
+  https: await sgMail.send(message);
 };
 
 export const registrationConfirmation = async code => {
