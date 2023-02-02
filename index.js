@@ -29,6 +29,11 @@ io.on('connection', socket => {
   });
 });
 
+// to return index.html file
+// app.get('/', (req, res, next) => {
+//   return res.sendFile(__dirname + '/index.html');
+// });
+
 app.use(express.json()); // parsing JSON
 app.use(morgan('tiny')); // morgan logger type
 
@@ -44,7 +49,10 @@ const start = async () => {
     await connectMongo();
 
     server.listen(PORT, err => {
-      if (err) console.log('error st server launch', err);
+      if (err) {
+        console.log('error st server launch', err);
+        process.exit(1);
+      }
       console.log(`server works at port ${PORT}`);
     });
   } catch (error) {
